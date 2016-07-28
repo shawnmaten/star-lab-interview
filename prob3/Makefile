@@ -7,4 +7,4 @@ all:
 
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean \
-  && rm simple_db_client
+  && rm -r simple_db_client modules.order *.o *.ko *.mod* .*.cmd
