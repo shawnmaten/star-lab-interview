@@ -29,7 +29,7 @@ There are two programs for this problem. The first, defined in prob2-1.c,
 creates a linux kernel module for a character device. The second, defined in
 prob2-2.c is a simple teste for the device. Run `make` then `insmod
 fibonacci.ko` to install the device. /dev/fibonacci should be present on the
-system. If you run `cat /dev/fibonacci' it will return 0; You run the tester by
+system. If you run `cat /dev/fibonacci` it will return 0; You run the tester by
 providing the kth fibonacci number you want. It will output the fibonacci
 numbers from 0 to k. You can view the kernel module output in /var/log/kern.log
 (or wherever it is on your system). Look for output with "Fibonacci:". And
