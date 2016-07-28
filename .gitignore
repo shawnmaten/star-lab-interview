@@ -5,6 +5,7 @@ simple_db_client
 
 # all
 *.o*
+.*.swp
 
 # kernel module
 modules.order
