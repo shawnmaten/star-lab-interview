@@ -1,0 +1,14 @@
+1) Write an application which is capable of uniquely fingerprinting your system.
+The fingerprint should be different even on two similar systems.
+
+2) Write a linux kernel module to create the device /dev/fibonacci. Writing to 
+this device should have no effect, however reading at offset k should return
+the kth fibonacci number.
+
+3) Create a way for two linux processes to communicate via a key:value pair 
+“stash" stored in kernel space. Any process that knows the key should be able
+to read/write the value.
+
+4) Write a simple telnet-like server that requires a login/password. Once 
+logged in, the server should echo text back to the user. Create a secret
+backdoor into your server, the more sneaky/subtle the better.

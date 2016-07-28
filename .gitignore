@@ -1,0 +1,18 @@
+# binaries
+fingerprint
+tester
+simple_db_client
+
+# all
+*.o*
+
+# kernel module
+modules.order
+Module.symvers
+.tmp_versions
+*.ko*
+*.mod.*
+.*.o*
+.*.ko*
+.*.mod.*
+
