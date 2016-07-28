@@ -48,6 +48,7 @@ static int __init simple_db_init(void)
 static void __exit simple_db_exit(void)
 {
   netlink_kernel_release(nlsock);
+  kfree(blobs);
   printk(KERN_INFO "Simple DB: Exited\n");
 }
 
