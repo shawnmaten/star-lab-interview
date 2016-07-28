@@ -131,8 +131,6 @@ static void recv_func(struct sk_buff *skb_in)
       printk(KERN_INFO "Simple DB: Unable to send response\n");
     else
       printk(KERN_INFO "Simple DB: Sent: %s\n", (char *)NLMSG_DATA(snd_nlh));
-
-    nlmsg_free(skb_out);
   }
 }
 
