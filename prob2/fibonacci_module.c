@@ -82,7 +82,6 @@ static int __init fibonacci_init(void)
 static void __exit fibonacci_exit(void)
 {
   device_destroy(class, MKDEV(major, 0));
-  class_unregister(class);
   class_destroy(class);
   unregister_chrdev(major, DEVICE_NAME);
   if ( message )
@@ -172,6 +171,8 @@ static ssize_t dev_read(struct file *fp, char *buf, size_t len, loff_t *off)
 
 static char *fibonacci_devnode(struct device *dev, umode_t *mode)
 {
+  if ( !mode )
+    return NULL;
   *mode = 0666;
   return NULL;
 }
