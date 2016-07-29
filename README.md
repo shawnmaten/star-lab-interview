@@ -28,12 +28,11 @@ System Fingerprint:
 There are two programs for this problem. The first, defined in
 fibonacci_module.c, creates a linux kernel module for a character device. The 
 second, defined in fibonacci_client.c is a simple tester for the device. Run 
-`make` then `sudo insmod fibonacci.ko` to install the device. 
-/dev/fibonacci should be present on the system. If you run `sudo cat
-/dev/fibonacci` it will return 0; You can view the kernel module output in 
-/var/log/kern.log (or wherever it is on your system). Look for output with 
-"Fibonacci:". Use the tester as below And finally remove the module with `sudo 
-rmmod fibonacci`.
+`make` then `sudo insmod fibonacci.ko` to install the device. /dev/fibonacci 
+should be present on the system. If you run `cat /dev/fibonacci` it will return 
+0. You can view the kernel module output in /var/log/kern.log (or wherever it is 
+on your system). Look for output with "Fibonacci:". Use the tester as below And
+finally remove the module with `sudo rmmod fibonacci`.
 
 ```
 ./fibonacci_client 13
@@ -45,9 +44,9 @@ The 0 to 13th fibonacci nums as returned /dev/fibonacci are:
 There's a kernel module, simple_db_module.c, and client tester,
 simple_db_client.c, for this solution. They send fixed-length messages to
 each other using netlink sockets. The kernel module stores key:value "blobs" in
-memory that it allocates as needed. To compile use `make` then `sudo insmod
-simple_db.ko` to insert the module. Run the client as below. Press ctrl-d to
-finish.
+memory that it allocates as needed. Output to the kernel log will start with
+"Simple DB:" To compile use `make` then `sudo insmod simple_db.ko` to insert 
+the module. Run the client as below. Press ctrl-d to finish.
 
 Terminal 1
 ```
