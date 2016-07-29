@@ -11,9 +11,7 @@ simple_db_client
 modules.order
 Module.symvers
 .tmp_versions
-*.ko*
-*.mod.*
-.*.o*
-.*.ko*
-.*.mod.*
-
+*.o 
+*.ko 
+*.mod* 
+.*.cmd
