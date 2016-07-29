@@ -9,7 +9,7 @@
 
 #include "simple_db.h"
 
-void gen_message(char *key, char *val, char *buf);
+void gen_message(char type, char *key, char *val, char *buf);
 
 int main(void)
 {
@@ -84,6 +84,8 @@ int main(void)
   {
     int i;
 
+    char type;
+
     memset(key, 0, SIMPLE_DB_KEY_LEN);
     memset(value, 0, SIMPLE_DB_VAL_LEN);
 
@@ -92,14 +94,19 @@ int main(void)
     {
       printf("Enter key:\n");
       fgets(key, SIMPLE_DB_KEY_LEN, stdin);
+      key[strlen(key)-1] = '\0';
       printf("Enter value:\n");
       fgets(value, SIMPLE_DB_VAL_LEN, stdin);
+      value[strlen(value)-1] = '\0';
+      type = 'S';
     }
     // setup to send a GET message
     else if ( strcasecmp(line, "get\n") == 0 )
     {      
       printf("Enter key:\n");
       fgets(key, SIMPLE_DB_KEY_LEN, stdin);
+      key[strlen(key)-1] = '\0';
+      type = 'R';
     }
     else
     {
@@ -107,7 +114,7 @@ int main(void)
       continue;
     }
     
-    gen_message(key, value, snd_str);
+    gen_message(type, key, value, snd_str);
  
     // send message
     if ( sendmsg(fd, &snd_msg, 0) == -1 )
@@ -150,19 +157,15 @@ int main(void)
   return 0;
 }
 
-void gen_message(char *key, char *val, char *buf)
+void gen_message(char type, char *key, char *val, char *buf)
 {
   int i;
 
-  if ( val )
-    buf[0] = 'S';
-  else
-    buf[0] = 'R';
+  buf[0] = type;
   
   for ( i = 0; i < SIMPLE_DB_KEY_LEN; i++ )
     buf[i+SIMPLE_DB_TYP_LEN] = key[i];
 
-  if ( val )
-    for ( i = 0; i < SIMPLE_DB_VAL_LEN; i++ )
-      buf[i+SIMPLE_DB_TYP_LEN+SIMPLE_DB_KEY_LEN] = val[i];
+  for ( i = 0; i < SIMPLE_DB_VAL_LEN; i++ )
+    buf[i+SIMPLE_DB_TYP_LEN+SIMPLE_DB_KEY_LEN] = val[i];
 }
