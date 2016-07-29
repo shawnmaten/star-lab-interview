@@ -1,10 +1,10 @@
 obj-m += fibonacci.o
-fibonacci-objs := prob2-1.o
+fibonacci-objs := fibonacci_module.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules \
-  && $(CC) prob2-2.c -o tester
+  && $(CC) fibonacci_client.c -o fibonacci_client
 
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean \
-  && rm tester
+  && rm fibonacci_client

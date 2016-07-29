@@ -5,7 +5,7 @@ LIBS = -lssl -lcrypto
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-fingerprint: prob1.o
+fingerprint: fingerprint.o
 	gcc -o $@ $^ $(CFLAGS) $(LIBS)
 
 all: fingerprint
