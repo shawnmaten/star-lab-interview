@@ -73,8 +73,8 @@ int main(void)
   bind(fd, (struct sockaddr*)&src_addr, sizeof(src_addr));
 
   // setup char buffers
-  key = calloc(SIMPLE_DB_KEY_LEN, sizeof(char));
-  value = calloc(SIMPLE_DB_VAL_LEN, sizeof(char));
+  key = malloc(SIMPLE_DB_KEY_LEN);
+  value = malloc(SIMPLE_DB_VAL_LEN);
   snd_str = NLMSG_DATA(snd_nlh);
   rcv_str = NLMSG_DATA(rcv_nlh);
 
@@ -84,41 +84,34 @@ int main(void)
   {
     int i;
 
+    memset(key, 0, SIMPLE_DB_KEY_LEN);
+    memset(value, 0, SIMPLE_DB_VAL_LEN);
+
     // setup to send a SET message
     if ( strcasecmp(line, "set\n") == 0 )
     {
       printf("Enter key:\n");
       fgets(key, SIMPLE_DB_KEY_LEN, stdin);
-      key[strlen(key)-1] = '\0';
       printf("Enter value:\n");
       fgets(value, SIMPLE_DB_VAL_LEN, stdin);
-      value[strlen(value)-1] = '\0';
-      gen_message(key, value, snd_str);
     }
     // setup to send a GET message
     else if ( strcasecmp(line, "get\n") == 0 )
     {      
       printf("Enter key:\n");
       fgets(key, SIMPLE_DB_KEY_LEN, stdin);
-      key[strlen(key)-1] = '\0';
-      gen_message(key, NULL, snd_str);
     }
     else
     {
       printf("Not a valid command.\n");
       continue;
     }
+    
+    gen_message(key, value, snd_str);
  
     // send message
     if ( sendmsg(fd, &snd_msg, 0) == -1 )
       fprintf(stderr, "Error: %s\n", strerror(errno));
-    else
-    {
-      printf("Sent netlink message:\n");
-      for ( i = 0; i < SIMPLE_DB_MSG_LEN; i++ )
-        printf("%c", snd_str[i]);
-      printf("\n\n");
-    }
 
     // recieve message back
     if ( strcasecmp(line, "get\n") == 0 )
@@ -128,16 +121,22 @@ int main(void)
         fprintf(stderr, "Error: %s\n", strerror(errno));
       else
       {
-
-        printf("Received netlink message:\n");
+        int non_null_bytes = 0;
+        
         for ( i = 0; i < SIMPLE_DB_MSG_LEN; i++ )
-          printf("%c", rcv_str[i]);
-        printf("\n\n");
+          if ( rcv_str[i] != '\0' )
+            non_null_bytes++;
 
-        if ( rcv_str[0] == '\0' )
-          printf("No value for key.\n");
+        if ( non_null_bytes )
+        {
+          printf("Value for key %s:\n", key);
+          for ( i = 0; i < SIMPLE_DB_MSG_LEN; i++ )
+            printf("%c", rcv_str[i]);
+          printf("\n");
+        }
         else
-          printf("Value for key %s == %s\n", key, rcv_str);
+          printf("Key %s not found.\n", key);
+
       }
     }
   }
@@ -154,8 +153,6 @@ int main(void)
 void gen_message(char *key, char *val, char *buf)
 {
   int i;
-
-  memset(buf, 0, SIMPLE_DB_MSG_LEN);
 
   if ( val )
     buf[0] = 'S';
