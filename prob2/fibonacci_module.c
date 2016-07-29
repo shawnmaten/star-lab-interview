@@ -172,8 +172,8 @@ static ssize_t dev_read(struct file *fp, char *buf, size_t len, loff_t *off)
 
 static char *fibonacci_devnode(struct device *dev, umode_t *mode)
 {
-	*mode = 0666;
-	return NULL;
+  *mode = 0666;
+  return NULL;
 }
 
 int num_digits(long long num)
