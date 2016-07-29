@@ -12,6 +12,7 @@
 static int dev_open(struct inode *, struct file *);
 static int dev_release(struct inode *, struct file *);
 static ssize_t dev_read(struct file *, char *, size_t, loff_t *);
+static char *fibonacci_devnode(struct device *dev, umode_t *mode);
 int num_digits(long long);
 long long fibonacci(long long);
 
@@ -59,7 +60,9 @@ static int __init fibonacci_init(void)
     unregister_chrdev(major, DEVICE_NAME);
     printk(KERN_ALERT "Fibonacci: Failed to register device class\n");
     return PTR_ERR( class );
-   }
+  }
+	class->devnode = fibonacci_devnode;
+
   printk(KERN_INFO "Fibonacci: Device class registered correctly\n");
  
   // Register device driver, cleanup if fails
@@ -167,9 +170,14 @@ static ssize_t dev_read(struct file *fp, char *buf, size_t len, loff_t *off)
   return bytes_to_copy;
 }
 
+static char *fibonacci_devnode(struct device *dev, umode_t *mode)
+{
+	*mode = 0666;
+	return NULL;
+}
+
 int num_digits(long long num)
 {
-  
   int digits = 0;
   
   if ( num <= 0 )
